@@ -1,0 +1,40 @@
+<?php
+// src/Sdz/BlogBundle/Entity/Image.php
+ 
+namespace Sdz\BlogBundle\Entity;
+ 
+use Doctrine\ORM\Mapping as ORM;
+ 
+/**
+ * Sdz\BlogBundle\Entity\Image
+ *
+ * @ORM\Table(name="sdz_image")
+ * @ORM\Entity(repositoryClass="Sdz\BlogBundle\Entity\ImageRepository")
+ */
+class Image
+{
+    /**
+     * @var integer $id
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string $url
+     *
+     * @ORM\Column(name="url", type="string", length=255)
+     */
+    private $url;
+
+    /**
+     * @var string $alt
+     *
+     * @ORM\Column(name="alt", type="string", length=255)
+     */
+    private $alt;
+
+    // Les getters et setters
+}
