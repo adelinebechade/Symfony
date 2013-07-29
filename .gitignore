@@ -1,3 +1,5 @@
+
+
 # Bootstrap
 app/bootstrap*
 
@@ -15,6 +17,9 @@ app/config/parameters.yml
 .settings
 .buildpath
 .project
+
+# Netbeans
+nbproject/*
 
 # Capifony
 Capfile
