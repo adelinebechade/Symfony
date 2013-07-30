@@ -1,4 +1,5 @@
 <?php
+
 namespace Sdz\BlogBundle\Entity;
  
 use Doctrine\ORM\Mapping as ORM;
@@ -6,13 +7,13 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Sdz\BlogBundle\Entity\Commentaire
  *
- * @ORM\Table(name="sdz_commentaire")
+ * @ORM\Table(name="commentaire")
  * @ORM\Entity(repositoryClass="Sdz\BlogBundle\Entity\CommentaireRepository")
  */
 class Commentaire
 {
     /**
-     * @ORM\ManyToOne(targetEntity="Sdz\BlogBundle\Entity\Article")
+     * @ORM\ManyToOne(targetEntity="Sdz\BlogBundle\Entity\Article", inversedBy="commentaires")
      * @ORM\JoinColumn(nullable=false)
      */
     private $article;

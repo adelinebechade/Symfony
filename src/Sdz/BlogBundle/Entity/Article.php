@@ -7,11 +7,18 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Article
  *
- * @ORM\Table(name="sdz_article")
+ * @ORM\Table(name="article")
  * @ORM\Entity(repositoryClass="Sdz\BlogBundle\Entity\ArticleRepository")
  */
 class Article
 {
+    /**
+     * @ORM\OneToMany(targetEntity="Sdz\BlogBundle\Entity\Commentaire", mappedBy="article")
+     * @ORM\ManyToMany(targetEntity="Sdz\BlogBundle\Entity\Categorie", cascade={"persist"})
+     */
+    private $commentaires; // Ici commentaires prend un « s », car un article a plusieurs commentaires !
+    private $categories;
+
     /**
      * @ORM\OneToOne(targetEntity="Sdz\BlogBundle\Entity\Image", cascade={"persist"})
      */
@@ -23,6 +30,9 @@ class Article
         $this->date = new \Datetime();
         // Par défaut, la publication de l'article est à true
         $this->publication = true;
+        $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+        // Rappelez-vous, on a un attribut qui doit contenir un ArrayCollection, on doit l'initialiser dans le constructeur
+        $this->commentaires = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -213,5 +223,72 @@ class Article
     public function getImage()
     {
         return $this->image;
+    }
+
+    /**
+     * Add categories
+     *
+     * @param Sdz\BlogBundle\Entity\Categorie $categories
+     */
+    public function addCategorie(\Sdz\BlogBundle\Entity\Categorie $categorie) // addCategorie sans « s » !
+    {
+        // Ici, on utilise l'ArrayCollection vraiment comme un tableau, avec la syntaxe []
+        $this->categories[] = $categorie;
+    }
+
+    /**
+     * Remove categories
+     *
+     * @param Sdz\BlogBundle\Entity\Categorie $categories
+     */
+    public function removeCategorie(\Sdz\BlogBundle\Entity\Categorie $categorie) // removeCategorie sans « s » !
+    {
+        // Ici on utilise une méthode de l'ArrayCollection, pour supprimer la catégorie en argument
+        $this->categories->removeElement($categorie);
+    }
+
+    /**
+     * Get categories
+     *
+     * @return Doctrine\Common\Collections\Collection
+     */
+    public function getCategories() // Notez le « s », on récupère une liste de catégories ici !
+    {
+        return $this->categories;
+    }
+
+    /**
+     * Add commentaires
+     *
+     * @param \Sdz\BlogBundle\Entity\Commentaire $commentaires
+     * @return Article
+     */
+    public function addCommentaire(\Sdz\BlogBundle\Entity\Commentaire $commentaires)
+    {
+        $this->commentaires[] = $commentaires;
+        $commentaires->setArticle($this); // On ajoute ceci
+        return $this;
+    }
+
+    /**
+     * Remove commentaires
+     *
+     * @param \Sdz\BlogBundle\Entity\Commentaire $commentaires
+     */
+    public function removeCommentaire(\Sdz\BlogBundle\Entity\Commentaire $commentaires)
+    {
+        $this->commentaires->removeElement($commentaires);
+        // Et si notre relation était facultative (nullable=true, ce qui n'est pas notre cas ici attention) :        
+        // $commentaire->setArticle(null);
+    }
+
+    /**
+     * Get commentaires
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCommentaires()
+    {
+        return $this->commentaires;
     }
 }
