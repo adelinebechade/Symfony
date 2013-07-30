@@ -68,6 +68,9 @@ class BlogController extends Controller
     // On récupère la liste des commentaires
     //$liste_commentaires = $em->getRepository('SdzBlogBundle:Commentaire')->findAll();
     
+    // On récupère les catégories pour l'article
+    //$listeArticles = $this->getDoctrine()->getManager()->getRepository('SdzBlogBundle:Article')->getAvecCategories();
+ 
     // On récupère les articleCompetence pour l'article $article
     $liste_articleCompetence = $em->getRepository('SdzBlogBundle:ArticleCompetence')->findByArticle($article->getId());
 
