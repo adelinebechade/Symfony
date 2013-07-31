@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="article")
  * @ORM\Entity(repositoryClass="Sdz\BlogBundle\Entity\ArticleRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Article
 {
@@ -31,6 +32,8 @@ class Article
         // Par défaut, la publication de l'article est à true
         $this->publication = true;
         $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+        // Rappelez-vous, on a un attribut qui doit contenir un ArrayCollection, on doit l'initialiser dans le constructeur
+        $this->commentaires = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -74,7 +77,20 @@ class Article
      * @ORM\Column(name="publication", type="boolean")
      */
     private $publication;
+    
+    /**
+     * @var datetime $dateEdition
+     * 
+     * @ORM\Column(name="dateEdition", type="datetime")
+     */
+    private $dateEdition;
 
+    /**
+     * @var integer
+     * 
+     * @ORM\Column(name="$nbCommentaires", type="integer")
+     */
+    private $nbCommentaires;
     /**
      * Get id
      *
@@ -253,5 +269,71 @@ class Article
     public function getCategories() // Notez le « s », on récupère une liste de catégories ici !
     {
         return $this->categories;
+    }
+
+    /**
+     * Add commentaires
+     *
+     * @param \Sdz\BlogBundle\Entity\Commentaire $commentaires
+     * @return Article
+     */
+    public function addCommentaire(\Sdz\BlogBundle\Entity\Commentaire $commentaires)
+    {
+        $this->commentaires[] = $commentaires;
+        $commentaires->setArticle($this); // On ajoute ceci
+        return $this;
+    }
+
+    /**
+     * Remove commentaires
+     *
+     * @param \Sdz\BlogBundle\Entity\Commentaire $commentaires
+     */
+    public function removeCommentaire(\Sdz\BlogBundle\Entity\Commentaire $commentaires)
+    {
+        $this->commentaires->removeElement($commentaires);
+        // Et si notre relation était facultative (nullable=true, ce qui n'est pas notre cas ici attention) :        
+        // $commentaire->setArticle(null);
+    }
+
+    /**
+     * Get commentaires
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCommentaires()
+    {
+        return $this->commentaires;
+    }
+
+    /**
+     * Set dateEdition
+     *
+     * @param \DateTime $dateEdition
+     * @return Article
+     */
+    public function setDateEdition($dateEdition)
+    {
+        $this->dateEdition = $dateEdition;
+
+        return $this;
+    }
+
+    /**
+     * Get dateEdition
+     *
+     * @return \DateTime 
+     */
+    public function getDateEdition()
+    {
+        return $this->dateEdition;
+    }
+    
+    /**
+     * @ORM\PreUpdate
+     */
+    public function updateDate()
+    {
+        $this->setDateEdition(new \Datetime());
     }
 }
