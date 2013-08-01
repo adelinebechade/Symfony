@@ -5,6 +5,8 @@ namespace Sdz\BlogBundle\Controller;
  
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sdz\BlogBundle\Entity\Article;
+use Sdz\BlogBundle\Form\ArticleType;
+use Sdz\BlogBundle\Form\ArticleEditType;
  
 class BlogController extends Controller
 {
@@ -45,39 +47,54 @@ class BlogController extends Controller
  
   public function ajouterAction()
   {
-    // La gestion d'un formulaire est particulière, mais l'idée est la suivante :
-   
-    if ($this->get('request')->getMethod() == 'POST') {
-      // Ici, on s'occupera de la création et de la gestion du formulaire
-   
-      $this->get('session')->getFlashBag()->add('info', 'Article bien enregistré');
-   
-      // Puis on redirige vers la page de visualisation de cet article
-      return $this->redirect( $this->generateUrl('sdzblog_voir', array('id' => 1)) );
+    $article = new Article;
+    $article->setPublication(false);
+
+    $form = $this->createForm(new ArticleType, $article);
+
+    $request = $this->get('request');
+    if ($request->getMethod() == 'POST') {
+      $form->bind($request);
+
+      if ($form->isValid()) {
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($article);
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('sdzblog_accueil'));
+      }
     }
-   
-    // Si on n'est pas en POST, alors on affiche le formulaire
-    return $this->render('SdzBlogBundle:Blog:ajouter.html.twig');
+
+    return $this->render('SdzBlogBundle:Blog:ajouter.html.twig', array(
+      'form' => $form->createView(),
+    ));
   }
  
-  public function modifierAction($id)
+  public function modifierAction(Article $article)
   {
-    // On récupère l'EntityManager
-    $em = $this->getDoctrine()
-               ->getEntityManager();
- 
-    // On récupère l'entité correspondant à l'id $id
-    $article = $em->getRepository('SdzBlogBundle:Article')
-                  ->find($id);
- 
-    // Si l'article n'existe pas, on affiche une erreur 404
-    if ($article == null) {
-      throw $this->createNotFoundException('Article[id='.$id.'] inexistant');
+    // On utilise le ArticleEditType
+    $form = $this->createForm(new ArticleEditType(), $article);
+
+    $request = $this->getRequest();
+
+    if ($request->getMethod() == 'POST') {
+      $form->bind($request);
+
+      if ($form->isValid()) {
+        // On enregistre l'article
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($article);
+        $em->flush();
+
+        // On définit un message flash
+        $this->get('session')->getFlashBag()->add('info', 'Article bien modifié');
+
+        return $this->redirect($this->generateUrl('sdzblog_voir', array('id' => $article->getId())));
+      }
     }
- 
-    // Ici, on s'occupera de la création et de la gestion du formulaire
- 
+
     return $this->render('SdzBlogBundle:Blog:modifier.html.twig', array(
+      'form'    => $form->createView(),
       'article' => $article
     ));
   }

@@ -30,4 +30,13 @@ class ArticleRepository extends EntityRepository
     // (n'oubliez pas le use correspondant en début de fichier)
     return new Paginator($query);
   }
+  
+  public function getSelectList()
+  {
+    $qb = $this->createQueryBuilder('a')
+               ->where('a.publication = 1'); // On filtre sur l'attribut publication
+ 
+    // Et on retourne simplement le QueryBuilder, et non la Query, attention
+    return $qb;
+  }
 }

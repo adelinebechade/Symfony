@@ -12,7 +12,9 @@
   <h1>Blog</h1>
  
   <hr>
- 
+  
+  {% include 'BcBootstrapBundle::flash.html.twig' with { 'close': true } %}
+
   {# On définit un nouveau bloc, que les vues du bundle pourront remplir #}
   {% block sdzblog_body %}
   {% endblock %}
