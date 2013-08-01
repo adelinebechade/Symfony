@@ -10,25 +10,17 @@ class BlogController extends Controller
 {
   public function indexAction($page)
   {
-    // On ne sait pas combien de pages il y a
-    // Mais on sait qu'une page doit être supérieure ou égale à 1
-    // Bien sûr pour le moment on ne se sert pas (encore !) de cette variable
-    if ($page < 1) {
-      // On déclenche une exception NotFoundHttpException 
-      // Cela va afficher la page d'erreur 404
-      // On pourra la personnaliser plus tard
-      throw $this->createNotFoundException('Page inexistante (page = '.$page.')');
-    }
- 
-    // Pour récupérer la liste de tous les articles : on utilise findAll()
+    // Pour récupérer la liste de tous les articles : on utilise notre nouvelle méthode
     $articles = $this->getDoctrine()
                      ->getManager()
                      ->getRepository('SdzBlogBundle:Article')
-                     ->findAll();
+                     ->getArticles(2, $page);
  
     // L'appel de la vue ne change pas
     return $this->render('SdzBlogBundle:Blog:index.html.twig', array(
-      'articles' => $articles
+      'articles'    => $articles,
+      'page'        => $page,
+      'nombrePage' => ceil(count($articles)/2)
     ));
   }
  
