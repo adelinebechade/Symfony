@@ -4,7 +4,9 @@
 namespace Sdz\BlogBundle\Entity;
  
 use Doctrine\ORM\Mapping as ORM;
- 
+use Sdz\BlogBundle\Validator\AntiFloodValidator;
+use Sdz\BlogBundle\Validator\AntiFlood;
+
 /**
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Sdz\BlogBundle\Entity\CommentaireRepository")
@@ -25,6 +27,7 @@ class Commentaire
  
   /**
    * @ORM\Column(name="contenu", type="text")
+   * @AntiFlood()
    */
   private $contenu;
  
