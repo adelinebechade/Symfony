@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new Sdz\BlogBundle\SdzBlogBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new Bc\Bundle\BootstrapBundle\BcBootstrapBundle(),
+            new Sdz\UserBundle\SdzUserBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

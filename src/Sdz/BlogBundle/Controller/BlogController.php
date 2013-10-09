@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sdz\BlogBundle\Entity\Article;
 use Sdz\BlogBundle\Form\ArticleType;
 use Sdz\BlogBundle\Form\ArticleEditType;
- 
+
 class BlogController extends Controller
 {
   public function indexAction($page)
