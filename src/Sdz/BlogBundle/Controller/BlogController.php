@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sdz\BlogBundle\Entity\Article;
 use Sdz\BlogBundle\Form\ArticleType;
 use Sdz\BlogBundle\Form\ArticleEditType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 class BlogController extends Controller
 {
@@ -45,21 +46,24 @@ class BlogController extends Controller
     ));
   }
  
+  /**
+   * @Secure(roles="ROLE_AUTEUR")
+   */
   public function ajouterAction()
   {
     $article = new Article;
- 
+
     // On crée le formulaire grâce à l'ArticleType
     $form = $this->createForm(new ArticleType(), $article);
- 
+
     // On récupère la requête
     $request = $this->getRequest();
- 
+
     // On vérifie qu'elle est de type POST
     if ($request->getMethod() == 'POST') {
       // On fait le lien Requête <-> Formulaire
       $form->bind($request);
- 
+
       // On vérifie que les valeurs entrées sont correctes
       // (Nous verrons la validation des objets en détail dans le prochain chapitre)
       if ($form->isValid()) {
@@ -67,22 +71,22 @@ class BlogController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->persist($article);
         $em->flush();
- 
+
         // On définit un message flash
         $this->get('session')->getFlashBag()->add('info', 'Article bien ajouté');
- 
+
         // On redirige vers la page de visualisation de l'article nouvellement créé
         return $this->redirect($this->generateUrl('sdzblog_voir', array('id' => $article->getId())));
       }
     }
- 
-    // À ce stade :
-    // - Soit la requête est de type GET, donc le visiteur vient d'arriver sur la page et veut voir le formulaire
-    // - Soit la requête est de type POST, mais le formulaire n'est pas valide, donc on l'affiche de nouveau
- 
-    return $this->render('SdzBlogBundle:Blog:ajouter.html.twig', array(
-      'form' => $form->createView(),
-    ));
+
+        // À ce stade :
+        // - Soit la requête est de type GET, donc le visiteur vient d'arriver sur la page et veut voir le formulaire
+        // - Soit la requête est de type POST, mais le formulaire n'est pas valide, donc on l'affiche de nouveau
+
+        return $this->render('SdzBlogBundle:Blog:ajouter.html.twig', array(
+          'form' => $form->createView(),
+        ));
   }
  
   public function modifierAction(Article $article)

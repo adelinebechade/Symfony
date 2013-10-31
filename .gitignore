@@ -1,26 +1,20 @@
-
-
-# Bootstrap
-app/bootstrap*
-
-# Symfony directories
-vendor/*
-*/logs/*
-*/cache/*
-web/uploads/*
-web/bundles/*
-
-# Configuration files
-app/config/parameters.yml
-
-# Eclipse files
-.settings
-.buildpath
 .project
-
+web/bundles/*
+app/config/parameters.yml
 # Netbeans
+# Symfony directories
+# Configuration files
 nbproject/*
-
-# Capifony
-Capfile
+.settings
 app/config/deploy.rb
+# Capifony
+*/logs/*
+.buildpath
+# Eclipse files
+/nbproject
+# Bootstrap
+vendor/*
+*/cache/*
+Capfile
+app/bootstrap*
+web/uploads/*
