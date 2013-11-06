@@ -15,7 +15,7 @@ class ArticleType extends AbstractType
     $builder
       ->add('date',      'date')
       ->add('titre',     'text')
-      ->add('contenu',   'textarea')
+      ->add('contenu',   'ckeditor')
       ->add('auteur',    'text')
       ->add('image',     new ImageType())
       /*

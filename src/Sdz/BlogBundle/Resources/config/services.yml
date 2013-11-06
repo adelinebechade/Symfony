@@ -5,6 +5,12 @@ services:
     sdz_blog.antispam:
         class: Sdz\BlogBundle\Antispam\SdzAntispam
         arguments: [@mailer, %locale%, 3]
+        tags:
+            - { name: twig.extension }
+    sdz_blog.ckeditor:
+        class: Sdz\BlogBundle\Form\Type\CkeditorType
+        tags:
+            - { name: form.type, alias: ckeditor }
 
     sdzblog.validator.antiflood:                             # Le nom du service
         class: Sdz\BlogBundle\Validator\AntiFloodValidator   # La classe du service, ici notre validateur déjà créé
