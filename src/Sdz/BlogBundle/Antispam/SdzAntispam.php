@@ -5,33 +5,20 @@ namespace Sdz\BlogBundle\Antispam;
  
 class SdzAntispam extends \Twig_Extension
 {
-  /*
-   * Twig va exécuter cette méthode pour savoir quelle(s) fonction(s) ajoute notre service
-   */
-  public function getFunctions()
-  {
-    return array(
-      'checkIfSpam' => new \Twig_Function_Method($this, 'isSpam')
-    );
-  }
- 
-  /*
-   * La méthode getName() identifie votre extension Twig, elle est obligatoire
-   */
-  public function getName()
-  {
-    return 'SdzAntispam';
-  }
-
   protected $mailer;
   protected $locale;
   protected $nbForSpam;
  
-  public function __construct(\Swift_Mailer $mailer, $locale, $nbForSpam)
+  public function __construct(\Swift_Mailer $mailer, $nbForSpam)
   {
     $this->mailer    = $mailer;
-    $this->locale    = $locale;
     $this->nbForSpam = (int) $nbForSpam;
+  }
+
+  // Et on ajoute un setter
+  public function setLocale($locale)
+  {
+    $this->locale = $locale;
   }
  
   /**
@@ -75,5 +62,23 @@ class SdzAntispam extends \Twig_Extension
       $matches);
  
     return count($matches[0]);
+  }
+  
+  /*
+   * Twig va exécuter cette méthode pour savoir quelle(s) fonction(s) ajoute notre service
+   */
+  public function getFunctions()
+  {
+    return array(
+      'checkIfSpam' => new \Twig_Function_Method($this, 'isSpam')
+    );
+  }
+ 
+  /*
+   * La méthode getName() identifie votre extension Twig, elle est obligatoire
+   */
+  public function getName()
+  {
+    return 'SdzAntispam';
   }
 }

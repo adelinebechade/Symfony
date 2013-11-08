@@ -67,6 +67,17 @@ class BlogController extends Controller
       // On vérifie que les valeurs entrées sont correctes
       // (Nous verrons la validation des objets en détail dans le prochain chapitre)
       if ($form->isValid()) {
+          
+        // On crée l'évènement avec ses 2 arguments
+        $event = new MessagePostEvent($article->getContenu(), $article->getUser());
+
+        // On déclenche l'évènement
+        $this->get('event_dispatcher')
+           ->dispatch(BigbrotherEvents::onMessagePost, $event);
+
+        // On récupère ce qui a été modifié par le ou les listeners, ici le message
+        $article->setContenu($event->getMessage());
+
         // On enregistre notre objet $article dans la base de données
         $em = $this->getDoctrine()->getManager();
         $em->persist($article);
