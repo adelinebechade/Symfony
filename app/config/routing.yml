@@ -1,6 +1,8 @@
 sdz_blog:
     resource: "@SdzBlogBundle/Resources/config/routing.yml"
-    prefix:   /blog
+    prefix:   /{_locale}/blog
+    requirements:
+        _locale: en|fr # les locales disponibles, séparées par des pipes « | »
 
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
