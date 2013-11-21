@@ -8,6 +8,7 @@ use Sdz\BlogBundle\Entity\Article;
 use Sdz\BlogBundle\Form\ArticleType;
 use Sdz\BlogBundle\Form\ArticleEditType;
 use JMS\SecurityExtraBundle\Annotation\Secure;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 class BlogController extends Controller
 {
@@ -26,23 +27,14 @@ class BlogController extends Controller
       'nombrePage' => ceil(count($articles)/2)
     ));
   }
- 
+
   public function voirAction(Article $article)
   {
     // À ce stade, la variable $article contient une instance de la classe Article
     // Avec l'id correspondant à l'id contenu dans la route !
  
-    // On récupère ensuite les articleCompetence pour l'article $article
-    // On doit le faire à la main pour l'instant, car la relation est unidirectionnelle
-    // C'est-à-dire que $article->getArticleCompetences() n'existe pas !
-    $listeArticleCompetence = $this->getDoctrine()
-                                   ->getManager()
-                                   ->getRepository('SdzBlogBundle:ArticleCompetence')
-                                   ->findByArticle($article->getId());
- 
     return $this->render('SdzBlogBundle:Blog:voir.html.twig', array(
-      'article'                 => $article,
-      'listeArticleCompetence'  => $listeArticleCompetence
+      'article'                 => $article
     ));
   }
  
