@@ -16,3 +16,6 @@ _main:
 SdzBlogBundle_traduction:
     pattern:  /{_locale}/traduction/{name}
     defaults: { _controller: SdzBlogBundle:Blog:traduction }
+    
+console:
+    resource: "@CoreSphereConsoleBundle/Resources/config/routing.yml"
